@@ -14,6 +14,9 @@ unsigned char test[8] = {0xff, 0x01, 0x00, 0x19, 0x00, 0x80, 80, 70}; //测试
                       //主机ID,功能码,寄存器, 长度, 高低八位(模式，03为速度，00为位置), 留空，留空
 unsigned char modeSetup[8] = {0xff, 0x06, 0x19, 0x01, 00, 00, 00, 00}; //由00位置模式改为03速度模式
 
+                      //主机ID,功能码,寄存器, 长度, 高低八位(02 =  地址修改为0x02), 留空，留空
+unsigned char addressSetup[8] = {0xff, 0x06, 0x15, 0x01, 02, 00,00, 00}; //设置地址为02
+
                       //主机ID,功能码,寄存器, 长度, 数据低高八位, 留空，留空
 unsigned char save[8] = {0xff, 0x06, 0x14, 0x01, 01, 00, 00, 00}; //参数保存位
 
@@ -23,12 +26,10 @@ void setup() {
 }
 
 void loop() {
-  CAN0.sendMsgBuf(0x02, 0, 8, modeSetup);
+  CAN0.sendMsgBuf(0x02, 0, 8, modeSetup); //  modeSetup或者addressSetup
   delay(1000);
-  CAN0.sendMsgBuf(0x02, 0, 8, save);
+  CAN0.sendMsgBuf(0x02, 0, 8, save);  //  一定要保存
   delay(1000);
-  CAN0.sendMsgBuf(0x02, 0, 8, test);
+  CAN0.sendMsgBuf(0x02, 0, 8, test);  //  测试
   while(1);
 }
-
-//速度模式和位置模式的切换
